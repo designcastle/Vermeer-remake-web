@@ -1,0 +1,1388 @@
+/* src/styles/main.css — Refined Europa Universalis V Inspired Grand Strategy Design */
+
+:root {
+  --bg-obsidian: #0a0d14;
+  --bg-panel: rgba(13, 17, 26, 0.92);
+  --bg-panel-solid: #101520;
+  --bg-card: rgba(20, 26, 38, 0.88);
+  --bg-card-hover: rgba(28, 37, 54, 0.95);
+  --bg-inset: rgba(8, 10, 16, 0.88);
+  --bg-royal: linear-gradient(135deg, #1a2d4c 0%, #0f1b30 100%);
+  --bg-gold-btn: linear-gradient(180deg, #b8903c 0%, #7d5d1d 100%);
+  --bg-gold-btn-hover: linear-gradient(180deg, #cfa54a 0%, #967126 100%);
+
+  --parchment: #f4efe4;
+  --parchment-dim: #bfb8a8;
+  --muted: #848d9f;
+
+  --gold: #d9b359;
+  --gold-bright: #f7dc84;
+  --gold-dim: rgba(217, 179, 89, 0.36);
+  --border-subtle: rgba(132, 141, 159, 0.24);
+
+  --emerald: #44c479;
+  --crimson: #e05252;
+  --amber: #eba03f;
+  --royal-blue: #3b73c4;
+
+  --font-display: "Cinzel Decorative", "Cinzel", Georgia, serif;
+  --font-heading: "Cinzel", Georgia, serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  background-color: var(--bg-obsidian);
+  color: var(--parchment);
+  font-family: var(--font-sans);
+  /* modern-web-guidance (visually-stable-font-fallbacks & typography):
+     unitless line-height + font-size-adjust: from-font to prevent layout shift */
+  line-height: 1.5;
+  font-size-adjust: from-font;
+  text-align: start;
+  overflow: hidden;
+  user-select: none;
+}
+
+h1,
+h2,
+h3,
+.city-heading,
+.dialog-eyebrow {
+  font-family: var(--font-heading);
+  /* Normalize capital letter metrics on display headers */
+  font-size-adjust: cap-height from-font;
+  margin: 0;
+  line-height: 1.25;
+}
+
+p {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+#app-shell {
+  position: relative;
+  inline-size: 100vw;
+  block-size: 100vh;
+}
+
+#game-canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  display: block;
+  cursor: grab;
+}
+
+#game-canvas:active {
+  cursor: grabbing;
+}
+
+/* ============================================================================
+   1. TOP IMPERIAL RIBBON BAR (Europa Universalis V Style)
+   ============================================================================ */
+.imperial-ribbon {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  min-block-size: 3.6rem;
+  padding: 0.35rem 0.85rem;
+  background: linear-gradient(180deg, rgba(14, 19, 30, 0.98) 0%, rgba(9, 12, 20, 0.95) 100%);
+  border-block-end: 1.5px solid var(--gold);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  z-index: 20;
+}
+
+.ribbon-identity {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.portrait-medallion {
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  border-radius: 0.35rem;
+  border: 2px solid var(--gold-bright);
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+}
+
+.portrait-medallion img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.city-shield-sm {
+  inline-size: 2.2rem;
+  block-size: 2.55rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.6));
+}
+
+.city-shield-md {
+  inline-size: 2.75rem;
+  block-size: 3.2rem;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.7));
+}
+
+.identity-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-heading {
+  font-size: clamp(0.95rem, 0.8rem + 0.4vw, 1.2rem);
+  color: var(--gold-bright);
+  letter-spacing: 0.04em;
+}
+
+.exchange-sub {
+  font-size: 0.75rem;
+  color: var(--parchment-dim);
+  font-family: var(--font-mono);
+}
+
+.ribbon-metrics {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.metric-pill {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  min-block-size: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metric-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+}
+
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.text-gold {
+  color: var(--gold-bright);
+}
+
+.text-emerald {
+  color: var(--emerald);
+}
+
+.text-crimson {
+  color: var(--crimson);
+}
+
+.text-amber {
+  color: var(--amber);
+}
+
+.text-parchment {
+  color: var(--parchment);
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.ribbon-clock-pod {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.4rem;
+  padding: 0.25rem 0.6rem;
+}
+
+.clock-date-block {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 7.2rem;
+}
+
+.clock-date {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--parchment);
+}
+
+.clock-state {
+  font-size: 0.7rem;
+  color: var(--gold);
+}
+
+.clock-controls,
+.utility-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+/* ============================================================================
+   2. BUTTONS & INTERACTIVE CONTROLS (min-block-size per typography guide)
+   ============================================================================ */
+button {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--parchment);
+  background: var(--bg-card);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.3rem;
+  padding: 0.35rem 0.75rem;
+  min-block-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  background: var(--bg-card-hover);
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 10px rgba(247, 220, 132, 0.2);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.55rem;
+  font-size: 0.76rem;
+  min-block-size: 1.85rem;
+}
+
+.btn-icon {
+  padding: 0.25rem 0.48rem;
+  min-block-size: 1.85rem;
+}
+
+.btn-icon.active {
+  background: var(--bg-gold-btn);
+  border-color: var(--gold-bright);
+  color: #fff;
+}
+
+.btn-gold {
+  background: var(--bg-gold-btn);
+  border-color: var(--gold-bright);
+  color: #fff9e6;
+}
+
+.btn-gold:hover:not(:disabled) {
+  background: var(--bg-gold-btn-hover);
+}
+
+.btn-royal {
+  background: var(--bg-royal);
+  border-color: var(--gold);
+}
+
+.btn-emerald {
+  background: linear-gradient(180deg, #256f46 0%, #184c2f 100%);
+  border-color: var(--emerald);
+}
+
+.btn-crimson {
+  background: linear-gradient(180deg, #872b2b 0%, #591a1a 100%);
+  border-color: var(--crimson);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-subtle);
+}
+
+/* ============================================================================
+   3. LEFT-DOCKED EU5 INSPECTOR SIDEBAR
+   ============================================================================ */
+.imperial-dock {
+  position: absolute;
+  inset-block-start: 4.35rem;
+  inset-inline-start: 0.75rem;
+  inset-block-end: 4.35rem;
+  inline-size: min(27.5rem, 42vw);
+  background: var(--bg-panel);
+  backdrop-filter: blur(14px);
+  border: 1.5px solid var(--gold);
+  border-radius: 0.45rem;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.75);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.dock-header {
+  background: linear-gradient(135deg, rgba(30, 49, 82, 0.95) 0%, rgba(15, 23, 38, 0.98) 100%);
+  border-block-end: 1px solid var(--gold-dim);
+  padding: 0.7rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dock-header-text h1 {
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.06em;
+}
+
+.dock-header-text p {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--parchment-dim);
+}
+
+.dock-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  padding: 0.4rem 0.5rem;
+  background: rgba(7, 9, 15, 0.9);
+  border-block-end: 1px solid var(--border-subtle);
+}
+
+.dock-tab {
+  font-family: var(--font-heading);
+  font-size: 0.74rem;
+  padding: 0.4rem 0.3rem;
+  border-radius: 0.25rem;
+  background: rgba(18, 23, 34, 0.7);
+  border: 1px solid transparent;
+  color: var(--parchment-dim);
+}
+
+.dock-tab.active {
+  background: var(--bg-royal);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
+.dock-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+/* Inspector Cards */
+.inspector-card {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.4rem;
+  padding: 0.7rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.inspector-card.gold-border {
+  border-color: var(--gold-dim);
+}
+
+.inspector-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.inspector-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  color: var(--gold-bright);
+}
+
+.kv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.kv-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.4rem;
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: 0.25rem;
+}
+
+.kv-row span:first-child {
+  color: var(--muted);
+}
+
+.kv-row strong {
+  font-family: var(--font-mono);
+}
+
+/* Framed Old Master Artwork Preview Component */
+.framed-painting-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #17120c;
+  padding: 0.55rem;
+  border-radius: 0.3rem;
+  border: 3px solid #c89d42;
+  box-shadow:
+    inset 0 0 0 2px #5c4314,
+    0 8px 22px rgba(0, 0, 0, 0.75);
+}
+
+.framed-painting-box img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(0, 0, 0, 0.8);
+}
+
+.lot-preview-grid {
+  display: grid;
+  grid-template-columns: 6.2rem 1fr;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.lot-preview-meta h3 {
+  font-family: var(--font-serif);
+  font-size: 1.12rem;
+  color: var(--parchment);
+}
+
+.lot-preview-meta p {
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+}
+
+/* Gallery Grid in Collection Tab */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.gallery-cell {
+  background: var(--bg-inset);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.35rem;
+  padding: 0.55rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.35rem;
+}
+
+.gallery-cell .framed-painting-box {
+  inline-size: 6.5rem;
+  block-size: 7.6rem;
+}
+
+/* ============================================================================
+   4. BOTTOM-CENTER FLOATING MAP BAR & BOTTOM-RIGHT TELEGRAPH WIRE
+   ============================================================================ */
+.floating-map-bar {
+  position: absolute;
+  inset-block-end: 0.65rem;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid var(--gold);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.65rem;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.75);
+  z-index: 16;
+}
+
+.city-pill-group {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.city-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+}
+
+.city-pill-btn.active {
+  background: var(--bg-royal);
+  border-color: var(--gold-bright);
+  color: var(--gold-bright);
+}
+
+.city-pill-btn img {
+  inline-size: 1.15rem;
+  block-size: 1.35rem;
+  object-fit: contain;
+}
+
+.bar-divider {
+  inline-size: 1px;
+  block-size: 1.8rem;
+  background: var(--gold-dim);
+}
+
+.btn-gold-lg {
+  background: var(--bg-gold-btn);
+  border-color: var(--gold-bright);
+  color: #fff9e6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem 0.9rem;
+  font-family: var(--font-heading);
+  font-size: 0.82rem;
+}
+
+.btn-gold-lg small {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  color: #f9e8b2;
+}
+
+.imperial-telegraph {
+  position: absolute;
+  inset-block-end: 0.65rem;
+  inset-inline-end: 0.75rem;
+  inline-size: min(23rem, 30vw);
+  max-block-size: 9.5rem;
+  background: var(--bg-panel);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.4rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  z-index: 15;
+  overflow: hidden;
+}
+
+.telegraph-header {
+  background: rgba(20, 29, 46, 0.95);
+  border-block-end: 1px solid var(--border-subtle);
+  padding: 0.3rem 0.65rem;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  color: var(--gold-bright);
+  display: flex;
+  justify-content: space-between;
+}
+
+.telegraph-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 0.65rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+}
+
+.telegraph-list li strong {
+  color: var(--gold);
+  display: block;
+}
+
+.telegraph-list li span {
+  color: var(--parchment-dim);
+}
+
+/* ============================================================================
+   5. NATIVE <dialog> MODALS (modern-web-guidance: dialog & light-dismiss-a-dialog)
+   ============================================================================ */
+/* MANDATORY from modern-web-guidance (dialog):
+   Do not set display on dialog unconditionally; scope with dialog[open].
+   Contain scroll chaining on dialog:modal and dialog::backdrop. */
+dialog.imperial-dialog {
+  padding: 0;
+  border: 2px solid var(--gold-bright);
+  border-radius: 0.55rem;
+  background: var(--bg-panel-solid);
+  color: var(--parchment);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.9);
+  max-inline-size: min(62rem, 94vw);
+  max-block-size: 88vh;
+  inline-size: 100%;
+}
+
+dialog.imperial-dialog[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  background-color: rgba(4, 6, 12, 0.76);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.dialog-frame {
+  display: flex;
+  flex-direction: column;
+  max-block-size: 86vh;
+  overflow: hidden;
+}
+
+.dialog-header {
+  background: var(--bg-royal);
+  border-block-end: 1.5px solid var(--gold);
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dialog-eyebrow {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--gold);
+  letter-spacing: 0.08em;
+}
+
+.dialog-header h2 {
+  font-size: clamp(1.1rem, 0.95rem + 0.6vw, 1.45rem);
+  color: var(--parchment);
+}
+
+/* Auction Salon Layout */
+.auction-salon-grid {
+  display: block;
+  overflow-y: auto;
+}
+
+.salon-easel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.45rem;
+  padding: 1rem;
+}
+
+.salon-easel .framed-painting-box {
+  inline-size: 14.5rem;
+  block-size: 17.2rem;
+}
+
+.salon-podium {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.bid-banner {
+  background: var(--bg-inset);
+  border: 1.5px solid var(--gold);
+  border-radius: 0.45rem;
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bid-amount-big {
+  font-family: var(--font-mono);
+  font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem);
+  color: var(--gold-bright);
+  font-weight: 700;
+}
+
+.gavel-meter {
+  inline-size: 100%;
+  block-size: 0.55rem;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-block-start: 0.35rem;
+}
+
+.gavel-meter-fill {
+  block-size: 100%;
+  background: linear-gradient(90deg, var(--emerald), var(--gold-bright), var(--crimson));
+  transition: width 0.15s linear;
+}
+
+.paddle-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.55rem;
+}
+
+.rivals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.rival-card {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.4rem;
+  padding: 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.rival-card.high-bidder {
+  border-color: var(--gold-bright);
+  background: rgba(44, 68, 48, 0.45);
+}
+
+.rival-card img {
+  inline-size: 2.8rem;
+  block-size: 2.8rem;
+  border-radius: 0.3rem;
+  object-fit: cover;
+  border: 1.5px solid var(--gold);
+}
+
+/* ============================================================================
+   6. RESPONSIVE DATA TABLE (modern-web-guidance: responsive-table)
+   ============================================================================ */
+.rules-modal-body {
+  padding: 1.2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rules-search-bar input {
+  inline-size: 100%;
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  background: var(--bg-inset);
+  color: var(--parchment);
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.35rem;
+}
+
+.rules-articles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: 0.75rem;
+}
+
+.rules-section-heading {
+  font-size: 1rem;
+  color: var(--gold-bright);
+  margin-block-start: 0.5rem;
+}
+
+.table-wrapper {
+  overflow: auto;
+  max-inline-size: 100%;
+  max-block-size: min(420px, 60vh);
+  container-type: inline-size;
+  border: 1px solid var(--gold-dim);
+  border-radius: 0.4rem;
+}
+
+.imperial-table {
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.84rem;
+}
+
+.imperial-table caption {
+  text-align: start;
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font-heading);
+  color: var(--gold-bright);
+  background: rgba(16, 22, 34, 0.95);
+}
+
+.imperial-table thead {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: #182338;
+}
+
+.imperial-table th,
+.imperial-table td {
+  padding: 0.55rem 0.85rem;
+  border-block-end: 1px solid var(--border-subtle);
+  text-align: start;
+}
+
+.imperial-table tbody th {
+  position: sticky;
+  inset-inline-start: 0;
+  background: #121826;
+  color: var(--gold-bright);
+}
+
+@container (width < 600px) {
+
+  .imperial-table,
+  .imperial-table thead,
+  .imperial-table tbody,
+  .imperial-table tr,
+  .imperial-table th,
+  .imperial-table td {
+    display: block;
+  }
+
+  .imperial-table thead {
+    display: none;
+  }
+
+  .imperial-table tr {
+    margin-block-end: 1rem;
+    border: 1px solid var(--gold-dim);
+  }
+
+  .imperial-table tbody th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background: #1a2438;
+  }
+
+  .imperial-table td:nth-child(2)::before {
+    content: var(--label-2) ": ";
+    color: var(--muted);
+  }
+
+  .imperial-table td:nth-child(3)::before {
+    content: var(--label-3) ": ";
+    color: var(--muted);
+  }
+
+  .imperial-table td:nth-child(4)::before {
+    content: var(--label-4) ": ";
+    color: var(--muted);
+  }
+
+  .imperial-table td:nth-child(5)::before {
+    content: var(--label-5) ": ";
+    color: var(--muted);
+  }
+
+  .imperial-table td:nth-child(6)::before {
+    content: var(--label-6) ": ";
+    color: var(--muted);
+  }
+}
+
+/* Setup Grid */
+.setup-grid {
+  padding: 1.25rem;
+  display: grid;
+  grid-template-columns: 16rem 1fr;
+  gap: 1.25rem;
+  align-items: center;
+}
+
+/* Toast Banner */
+.toast-banner {
+  position: absolute;
+  inset-block-end: 4.5rem;
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  background: rgba(12, 16, 26, 0.96);
+  border: 1.5px solid var(--gold-bright);
+  color: var(--parchment);
+  padding: 0.55rem 1.25rem;
+  border-radius: 0.4rem;
+  font-size: 0.88rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
+  z-index: 40;
+}
+
+
+/* ============================================================================
+   8. INSPECTOR COMPONENTS, QUICK PILLS & DIALOG LAYOUTS
+   ============================================================================ */
+.dock-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-block-end: 0.95rem;
+}
+
+.dock-desc {
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--parchment-dim);
+  margin: 0;
+}
+
+.section-heading {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold);
+  border-block-end: 1px solid var(--border-subtle);
+  padding-block-end: 0.25rem;
+  margin: 0.2rem 0 0;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.stat-box {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.35rem;
+  padding: 0.42rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.stat-box span {
+  font-size: 0.69rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-box strong {
+  font-size: 0.86rem;
+  color: var(--parchment);
+  font-family: var(--font-mono);
+}
+
+.stat-box strong.gold {
+  color: var(--gold-bright);
+}
+
+.stat-box strong.danger {
+  color: var(--crimson);
+}
+
+.route-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.82rem;
+}
+
+.route-card.gold-highlight {
+  border-color: var(--gold-dim);
+  background: rgba(203, 169, 98, 0.08);
+}
+
+.notice-banner {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.38rem;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--parchment-dim);
+}
+
+.notice-banner.success {
+  border-color: rgba(111, 191, 122, 0.45);
+  background: rgba(111, 191, 122, 0.09);
+  color: #bce6c2;
+}
+
+.notice-banner.danger {
+  border-color: rgba(201, 84, 90, 0.5);
+  background: rgba(201, 84, 90, 0.12);
+  color: #f4b7ba;
+}
+
+.btn-row,
+.btn-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.gold-btn {
+  background: linear-gradient(180deg, #cba962 0%, #9a7938 100%);
+  color: #0e131d;
+  border-color: #e9cc84;
+  font-weight: 700;
+}
+
+.gold-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #dfbe78 0%, #b18b42 100%);
+  color: #0a0e16;
+}
+
+.gold-btn.small,
+.panel-btn.small {
+  padding: 0.22rem 0.5rem;
+  min-block-size: 1.65rem;
+  font-size: 0.75rem;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.swatch {
+  display: inline-block;
+  inline-size: 0.6rem;
+  block-size: 0.6rem;
+  border-radius: 999px;
+  margin-inline-end: 0.35rem;
+}
+
+.card-stack,
+.gallery-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.estate-card,
+.art-card,
+.rule-card {
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.7rem;
+}
+
+.estate-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block-end: 0.35rem;
+}
+
+.estate-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.art-card {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.art-thumb {
+  inline-size: 3.8rem;
+  block-size: 4.5rem;
+  object-fit: cover;
+  border-radius: 0.28rem;
+  border: 1px solid var(--gold-dim);
+  flex-shrink: 0;
+}
+
+.art-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.art-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  font-size: 0.74rem;
+}
+
+.tag-good,
+.tag-bad,
+.tag-warn {
+  display: inline-block;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.tag-good {
+  background: rgba(111, 191, 122, 0.18);
+  color: #9ce4a6;
+}
+
+.tag-bad {
+  background: rgba(201, 84, 90, 0.2);
+  color: #f4a4a8;
+}
+
+.tag-warn {
+  background: rgba(217, 154, 62, 0.2);
+  color: #f2c882;
+}
+
+.table-container {
+  container-type: inline-size;
+  overflow-x: auto;
+}
+
+.market-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.market-table th,
+.market-table td {
+  padding: 0.42rem 0.35rem;
+  border-block-end: 1px solid var(--border-subtle);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.market-table th {
+  color: var(--muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+}
+
+/* Bottom City Quick Bar (positioned cleanly in open map area) */
+.map-quick-bar {
+  inset-inline-start: 25.4rem;
+  transform: none;
+  padding: 0.3rem 0.5rem;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.city-quick-pills {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.city-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.45rem;
+  min-block-size: 1.9rem;
+  font-size: 0.74rem;
+  background: var(--bg-inset);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.35rem;
+}
+
+.city-pill.here {
+  border-color: var(--gold-bright);
+  background: rgba(203, 169, 98, 0.14);
+}
+
+.city-pill.selected {
+  box-shadow: 0 0 0 1px var(--gold);
+}
+
+.city-pill img {
+  inline-size: 1.1rem;
+  block-size: 1.25rem;
+  object-fit: contain;
+}
+
+.pill-star {
+  color: var(--gold-bright);
+  font-size: 0.75rem;
+}
+
+/* Auction & Setup Dialog Internals */
+.auction-modal-body {
+  display: block;
+}
+
+.auction-layout {
+  display: grid;
+  grid-template-columns: 16rem minmax(0, 1fr);
+  gap: 1.25rem;
+  padding: 1.15rem;
+  align-items: start;
+  width: 100%;
+}
+
+.auction-canvas-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #0a0e16;
+  border-radius: 0.35rem;
+  overflow: hidden;
+  border: 1px solid var(--gold-dim);
+}
+
+.auction-painting {
+  position: absolute;
+  inset: 9%;
+  width: 82%;
+  height: 82%;
+  object-fit: cover;
+}
+
+.auction-ornate-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  pointer-events: none;
+}
+
+.auction-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.auction-art-head h3 {
+  margin: 0 0 0.2rem;
+  color: var(--gold-bright);
+}
+
+.timer-track {
+  height: 0.45rem;
+  background: var(--bg-inset);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+}
+
+.timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #c9545a, #e5c682);
+  transition: width 0.12s linear;
+}
+
+.auction-status-line {
+  font-size: 0.84rem;
+  color: var(--parchment);
+  padding: 0.45rem 0.65rem;
+  background: var(--bg-inset);
+  border-radius: 0.35rem;
+  border: 1px solid var(--border-subtle);
+}
+
+.auction-finished,
+.setup-panel {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.field-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--parchment-dim);
+}
+
+.field-label input,
+.field-label select {
+  background: var(--bg-inset);
+  border: 1px solid var(--gold-dim);
+  color: var(--parchment);
+  border-radius: 0.3rem;
+  padding: 0.45rem 0.6rem;
+  font-family: var(--font-sans);
+}
+
+.form-two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.rule-card h3 {
+  margin: 0 0 0.3rem;
+  font-size: 0.92rem;
+  color: var(--gold-bright);
+}
+
+.rule-card p {
+  margin: 0;
+  font-size: 0.83rem;
+  line-height: 1.45;
+  color: var(--parchment-dim);
+}

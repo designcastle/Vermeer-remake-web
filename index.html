@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VERMEER (1987) — Imperial Web Edition</title>
+  <!-- Free Google Webfonts: Cinzel Decorative, Cinzel, Cormorant Garamond, Plus Jakarta Sans, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+</head>
+<body>
+  <div id="app-shell">
+    <!-- Full-Viewport Interactive Cartographic Map Canvas -->
+    <canvas id="game-canvas" aria-label="Interactive North Atlantic and European Trade Map"></canvas>
+
+    <!-- EU5-Inspired Top Imperial Ribbon Bar -->
+    <header id="top-ribbon" class="imperial-ribbon">
+      <div class="ribbon-identity">
+        <div class="portrait-medallion" id="hud-player-portrait-wrap">
+          <img id="hud-player-portrait" src="./assets/portraits/player.jpg" alt="House Portrait" />
+        </div>
+        <img id="hud-city-shield" class="city-shield-sm" src="./assets/ui/shield_london.png" alt="City Coat of Arms" />
+        <div class="identity-titles">
+          <strong id="hud-city-name" class="city-heading">London</strong>
+          <span id="hud-exchange-badge" class="exchange-sub">Exchange 1.00× (£)</span>
+        </div>
+      </div>
+
+      <div class="ribbon-metrics" role="group" aria-label="Imperial Treasury Metrics">
+        <div class="metric-pill" title="Liquid Gold Reserves">
+          <span class="metric-label">Gold Treasury</span>
+          <strong id="hud-cash" class="metric-value text-gold">18,000 G</strong>
+        </div>
+        <div class="metric-pill" title="Outstanding Syndicate Debt">
+          <span class="metric-label">Syndicate Debt</span>
+          <strong id="hud-debt" class="metric-value text-muted">0 G</strong>
+        </div>
+        <div class="metric-pill" title="Total Net Worth vs. Uncle Walter's Testament Target">
+          <span class="metric-label">Net Worth</span>
+          <strong id="hud-networth" class="metric-value text-emerald">19,920 / 55,000 G</strong>
+        </div>
+        <div class="metric-pill" title="Recovered Authentic Old Master Paintings">
+          <span class="metric-label">Masterpieces</span>
+          <strong id="hud-artworks" class="metric-value text-parchment">0 / 5 Originals</strong>
+        </div>
+        <div class="metric-pill" title="Colonial Plantation Acres & Worker Brigades">
+          <span class="metric-label">Estates &amp; Staff</span>
+          <strong id="hud-estates" class="metric-value text-amber">1 ac • 2 wk</strong>
+        </div>
+      </div>
+
+      <div class="ribbon-clock-pod">
+        <div class="clock-date-block">
+          <strong id="hud-date" class="clock-date">May 1, 1924</strong>
+          <span id="hud-speed-status" class="clock-state">Paused</span>
+        </div>
+        <div class="clock-controls" role="group" aria-label="Time Controls">
+          <button type="button" id="btn-speed-pause" class="btn-icon active" title="Pause Calendar">⏸</button>
+          <button type="button" id="btn-speed-play" class="btn-icon" title="Real-Time Flow (1×)">▶</button>
+          <button type="button" id="btn-speed-fast" class="btn-icon" title="Fast Flow (2.5×)">⏩</button>
+          <button type="button" id="btn-step-5d" class="btn-royal btn-sm" title="Advance +5 Days (Shortcut: Space)">+5d</button>
+        </div>
+        <div class="utility-controls">
+          <button type="button" id="btn-save-game" class="btn-ghost btn-sm" title="Quick Save (F5)">Save</button>
+          <button type="button" id="btn-open-rules" class="btn-gold btn-sm" title="Encyclopedia &amp; C64 Tables (H)">? Rules</button>
+          <button type="button" id="btn-open-setup" class="btn-ghost btn-sm" title="New Campaign Setup">New</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Left-Docked Europa Universalis V Style Inspector Sidebar -->
+    <aside id="left-inspector" class="imperial-dock" aria-label="Department Inspector">
+      <div class="dock-header">
+        <img id="dock-city-shield" class="city-shield-md" src="./assets/ui/shield_london.png" alt="Selected City Crest" />
+        <div class="dock-header-text">
+          <h1 id="dock-title">LONDON</h1>
+          <p id="dock-subtitle">Christie's &amp; Sotheby's • Bank of England</p>
+        </div>
+      </div>
+
+      <!-- 4 Sleek EU5 Horizontal Department Tabs -->
+      <nav class="dock-tabs" aria-label="Inspector Tabs">
+        <button type="button" class="dock-tab active" data-tab="overview">City &amp; Travel</button>
+        <button type="button" class="dock-tab" data-tab="estates">Estates</button>
+        <button type="button" class="dock-tab" data-tab="market">Trade</button>
+        <button type="button" class="dock-tab" data-tab="gallery">Collection</button>
+      </nav>
+
+      <!-- Dynamic Tab Body Container -->
+      <div id="dock-body" class="dock-content"></div>
+    </aside>
+
+    <!-- Bottom-Center Floating Map & Quick Action Bar (EU5 Political Bar Style) -->
+    <nav id="bottom-map-bar" class="floating-map-bar" aria-label="World Capitals &amp; Auction Salon">
+      <div id="city-quick-pills" class="city-pill-group"></div>
+      <div class="bar-divider"></div>
+      <button type="button" id="btn-open-auction" class="btn-gold-lg">
+        <span>🏛 Enter Auction Salon</span>
+        <small id="btn-auction-badge">Lot Ready</small>
+      </button>
+    </nav>
+
+    <!-- Bottom-Right Compact Diplomatic / Telegraph Log -->
+    <section id="telegraph-feed" class="imperial-telegraph" aria-label="Imperial Telegraph Dispatches">
+      <header class="telegraph-header">
+        <span>⚡ Imperial Telegraph Wire</span>
+        <small id="telegraph-count">Dispatches</small>
+      </header>
+      <ul id="telegraph-list" class="telegraph-list"></ul>
+    </section>
+
+    <!-- Toast Notification Banner -->
+    <div id="toast-banner" class="toast-banner" role="status" aria-live="polite" hidden></div>
+  </div>
+
+  <!-- =======================================================================
+       MODAL 1: LIVE AUCTION SALON (<dialog> with showModal() & closedby="any")
+       ======================================================================= -->
+  <dialog id="auction-dialog" class="imperial-dialog auction-modal" closedby="any" aria-labelledby="auction-modal-title">
+    <div class="dialog-frame">
+      <header class="dialog-header">
+        <div>
+          <span id="auction-house-subtitle" class="dialog-eyebrow">CHRISTIE'S &amp; SOTHEBY'S AUCTION SALON</span>
+          <h2 id="auction-modal-title">Lot #01 — Girl with a Pearl Earring</h2>
+        </div>
+        <button type="button" id="btn-close-auction" class="btn-ghost btn-sm" aria-label="Close Auction Salon">✕ Close [Esc]</button>
+      </header>
+
+      <div id="auction-dialog-body" class="auction-salon-grid"></div>
+    </div>
+  </dialog>
+
+  <!-- =======================================================================
+       MODAL 2: ENCYCLOPEDIA & C64 DISASSEMBLY TABLES (<dialog>)
+       ======================================================================= -->
+  <dialog id="rules-dialog" class="imperial-dialog rules-modal" closedby="any" aria-labelledby="rules-modal-title">
+    <div class="dialog-frame">
+      <header class="dialog-header">
+        <div>
+          <span class="dialog-eyebrow">VERMEER (1987) — 6502 DISASSEMBLY &amp; STRATEGY GUIDE</span>
+          <h2 id="rules-modal-title">Imperial Encyclopedia &amp; Reference Tables</h2>
+        </div>
+        <form method="dialog">
+          <button type="submit" class="btn-ghost btn-sm" autofocus>✕ Close [Esc]</button>
+        </form>
+      </header>
+
+      <div class="rules-modal-body">
+        <div class="rules-search-bar">
+          <input type="search" id="rules-search-input" placeholder="Filter rules, artists, commodities, or cities..." aria-label="Filter Encyclopedia" />
+        </div>
+        <div id="rules-articles-container" class="rules-articles"></div>
+
+        <!-- Responsive Semantic Data Table (modern-web-guidance: responsive-table) -->
+        <h3 class="rules-section-heading">Colonial Plantation Master Table</h3>
+        <div tabindex="0" role="region" aria-labelledby="commodity-table-caption" class="table-wrapper">
+          <table class="imperial-table" style="--label-1: 'Commodity'; --label-2: 'C64 ID'; --label-3: 'Base Cost'; --label-4: 'Yield / Acre'; --label-5: 'Harvest Window'; --label-6: 'Risk Factors';">
+            <caption id="commodity-table-caption">Colonial Plantation Commodities &amp; Harvest Windows</caption>
+            <thead>
+              <tr>
+                <th scope="col">Commodity</th>
+                <th scope="col">C64 ID</th>
+                <th scope="col">Base Cost</th>
+                <th scope="col">Yield / Acre</th>
+                <th scope="col">Harvest Window</th>
+                <th scope="col">Risk Factors</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Tea</th>
+                <td><code>TEE</code></td>
+                <td>1,200 Gold</td>
+                <td>80 cwt</td>
+                <td>June–August</td>
+                <td>Drought, Red spider mite</td>
+              </tr>
+              <tr>
+                <th scope="row">Coffee</th>
+                <td><code>KAFFEE</code></td>
+                <td>2,400 Gold</td>
+                <td>65 cwt</td>
+                <td>September–November</td>
+                <td>Frost, Coffee rust fungus</td>
+              </tr>
+              <tr>
+                <th scope="row">Tobacco</th>
+                <td><code>TABAK</code></td>
+                <td>1,800 Gold</td>
+                <td>110 cwt</td>
+                <td>July–September</td>
+                <td>Hail, Blue mold</td>
+              </tr>
+              <tr>
+                <th scope="row">Cocoa</th>
+                <td><code>KAKAO</code></td>
+                <td>3,100 Gold</td>
+                <td>50 cwt</td>
+                <td>October–December</td>
+                <td>Flooding, Black pod rot</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- =======================================================================
+       MODAL 3: CAMPAIGN SETUP & VICTORY (<dialog>)
+       ======================================================================= -->
+  <dialog id="setup-dialog" class="imperial-dialog setup-modal" closedby="any" aria-labelledby="setup-modal-title">
+    <div class="dialog-frame">
+      <header class="dialog-header">
+        <div>
+          <span class="dialog-eyebrow">RALF GLAU'S VERMEER (1987) — GRAND STRATEGY REMAKE</span>
+          <h2 id="setup-modal-title">Uncle Walter's Testament — Campaign Dispatch</h2>
+        </div>
+        <form method="dialog">
+          <button type="submit" class="btn-ghost btn-sm">Resume Current</button>
+        </form>
+      </header>
+      <div id="setup-dialog-body" class="setup-grid"></div>
+    </div>
+  </dialog>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
+

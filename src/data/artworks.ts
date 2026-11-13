@@ -104,7 +104,5 @@ export const ARTWORKS: Artwork[] = RAW.map(([id, artistId, baseValue, epochYear,
 export const artworkById = (id: number): Artwork => ARTWORKS[id];
 export const isAuthentic = (a: Artwork): boolean => a.forgery === 0x00;
 
-// Three catalog entries have no clean Public Domain thumbnail; those use painted PNG stand-ins.
-const PNG_FALLBACK = new Set([22, 33, 36]);
 export const paintingSrc = (id: number): string =>
-  `./assets/paintings/art_${String(id).padStart(2, '0')}.${PNG_FALLBACK.has(id) ? 'png' : 'jpg'}`;
+  `./assets/paintings/art_${String(id).padStart(2, '0')}.jpg`;
